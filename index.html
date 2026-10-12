@@ -48,7 +48,32 @@ body{margin:0;background:#070d1c;color:#f7edda;font-family:Georgia,serif;overflo
 .rung:active,.rung:hover{background:#3d4560;box-shadow:0 0 25px #e9c77c77}
 .rung span{font-size:15px;letter-spacing:2px;text-shadow:0 0 10px #e9c77c}
 #r1{top:30%}#r2{top:43%}#r3{top:56%}#r4{top:69%}#r5{top:82%}#r6{top:95%}
-#intro{position:absolute;top:34%;left:0;width:100%;text-align:center;padding:24px;z-index:4;transition:opacity .5s}
+
+#intro{
+  position:absolute;
+  top:34%;
+  left:0;
+  width:100%;
+  text-align:center;
+  padding:24px 20px;
+  z-index:4;
+  transition:opacity .5s;
+  background:linear-gradient(
+    180deg,
+    transparent,
+    rgba(7,13,28,.94) 18%,
+    rgba(7,13,28,.94) 82%,
+    transparent
+  );
+}
+#intro p{
+  color:#f4f0e8;
+  text-shadow:0 2px 8px #000;
+}
+#intro h1{
+  color:#ffe7ad;
+  text-shadow:0 0 20px #d4b76b88,0 2px 8px #000;
+}
 h1{font-size:clamp(36px,10vw,54px);font-weight:normal;margin:12px 0;color:#f2d9a0;text-shadow:0 0 25px #d4b76b55}
 p{line-height:1.7;color:#d7d9e6}
 button{font:inherit;cursor:pointer;color:#f8e8c1;background:#111c31;border:1px solid #bba06d;border-radius:30px;padding:12px 22px}
@@ -69,12 +94,13 @@ button{font:inherit;cursor:pointer;color:#f8e8c1;background:#111c31;border:1px s
 <div id="world">
 <div id="moon" aria-label="The Moon"></div>
 <div id="ladder"></div>
-<div class="rung" id="r1" style="top:32%"><span>01 · THE MIND</span></div>
-<div class="rung" id="r2" style="top:45%"><span>02 · HIDDEN MOON</span></div>
-<div class="rung" id="r3" style="top:58%"><span>03 · WILD CHAOS</span></div>
-<div class="rung" id="r4" style="top:71%"><span>04 · WHAT HEALS</span></div>
-<div class="rung" id="r5" style="top:84%"><span>05 · UNSEEN WORLDS</span></div>
-<div class="rung" id="r6" style="top:97%"><span>06 · THE DISTANCE</span></div>
+
+<div class="rung" id="r1" style="top:82%"><span>01 · THE MIND</span></div>
+<div class="rung" id="r2" style="top:71%"><span>02 · HIDDEN MOON</span></div>
+<div class="rung" id="r3" style="top:60%"><span>03 · WILD CHAOS</span></div>
+<div class="rung" id="r4" style="top:49%"><span>04 · WHAT HEALS</span></div>
+<div class="rung" id="r5" style="top:38%"><span>05 · UNSEEN WORLDS</span></div>
+<div class="rung" id="r6" style="top:27%"><span>06 · THE DISTANCE</span></div>
 </div>
 <div id="intro"><p>A LITTLE JOURNEY THROUGH THE UNIVERSE</p><h1>Atlas of You</h1><p>Somewhere between the stars and the moon,<br>there is a world that reminds me of you.</p><button id="start">Begin the journey ✦</button></div>
 <div id="progress">A JOURNEY TO THE MOON</div>
