@@ -83,6 +83,15 @@ button{font:inherit;cursor:pointer;color:#f8e8c1;background:#111c31;border:1px s
 #panel.show{display:flex}
 .card{width:min(100%,430px);border:1px solid #bba06d;border-radius:18px;padding:26px;background:linear-gradient(145deg,#1a2944,#090f20);box-shadow:0 0 50px #a6b9ff22;max-height:85vh;overflow:auto}
 .card h2{color:#f2d9a0;font-weight:normal;font-size:28px}
+  #sectionImage{
+  display:none;
+  width:100%;
+  max-height:260px;
+  object-fit:contain;
+  border-radius:12px;
+  margin:8px 0 18px;
+  box-shadow:0 0 20px #d6d9ff22;
+  }
 .card a{color:#f2d9a0}
 #next{margin-top:20px}
 #progress{position:absolute;top:18px;left:0;width:100%;text-align:center;font-size:12px;letter-spacing:3px;color:#c6b58c;z-index:5}
@@ -106,32 +115,115 @@ button{font:inherit;cursor:pointer;color:#f8e8c1;background:#111c31;border:1px s
 <div id="progress">A JOURNEY TO THE MOON</div>
 <div id="hint">SCROLL THROUGH THE STARS · TAP TO DISCOVER</div>
 </div>
-<div id="panel"><div class="card"><p id="counter">A SECRET STAR</p><h2 id="title"></h2><div id="content"></div><button id="next">Continue upward ↑</button><p><button id="close">Close ×</button></p></div></div>
-<script>
+<div id="panel">
+  <div class="card">
+    <p id="counter">A SECRET STAR</p>
+    <h2 id="title"></h2>
+    <img id="sectionImage" alt="">
+    <div id="content"></div>
+    <button id="next">Continue upward ↑</button>
+    <p><button id="close">Close ×</button></p>
+  </div>
+</div>
 
+<audio id="sectionMusic" loop preload="none" playsinline></audio>
+<script>
 const data = [
-  {title:"The Mind",text:"What a strange step to begin with, don’t you think?Remember that game? … What if someone created a perfect copy of us? Before you even think about that, honestly, there’s something fascinating about the fact that you’ve started wondering about it at all.\n\nYou’re one of a kind. Because of your thoughts… your words… and the safe, thoughtful awareness you carry within you — the kind I wish everyone in the world could have."},
-  {title:"Hidden Moon",text:"Hi ! This is a place you might sometimes try to escape from, too… Dear Mohsen, with emotions so deep that not everyone may be able to understand them… the hidden half of the moon.... What you’ve been through is not something small or simple. I want you never to forget that you are loved, and that your feelings matter more than words could ever express. You are an artist. Sometimes born from pain, sometimes from joy, sometimes from anger, and sometimes from peace. But it is the depth within you that creates the miracle."},
-  {title:"Wild Chaos",text:"Ah, honestly, I just wanted to remind you that if you ever feel like taking someone’s account down, we might make a pretty good team!"},
-  {title:"What Heals You",text:"Maybe healing is finding your way back to yourself, even after getting lost in the emptiest rooms of your mind.\n\n “I am a memory that keeps searching for the room it once belonged to.”"},
-  {title:"Unseen Worlds",text:"You know, I really believe that one day, someone will invent that button… But what if they don't use it for good things? ....... What if that's already the case? ...... You know, I hope that if that button ever exists, you're the first one to get your hands on it. :) ...... And if you ever disappear into another world and stumble upon a magical beanstalk… please send me some magic beans"},
-  {title:"The Distance",text:"I want to say that if it weren't for this distance, I'd probably bake you an apple cake with some walnuts, make a little bitter coffee, and place a white candle on top for you. And we'd probably end up celebrating your birthday in the most random place imaginable... But well... we couldn't.\n\n It's okay, though. The fact that you've been here for several minutes now means that nothing can stop us"}
+  {
+    title: "The Mind",
+    text: "What a strange step to begin with, don’t you think?Remember that game? … What if someone created a perfect copy of us? Before you even think about that, honestly, there’s something fascinating about the fact that you’ve started wondering about it at all.\n\nYou’re one of a kind. Because of your thoughts… your words… and the safe, thoughtful awareness you carry within you — the kind I wish everyone in the world could have.",
+    image: "images/Mind.jpg",
+    music: "music/Mind.mp3"
+  },
+  {
+    title: "Hidden Moon",
+    text: "Hi ! This is a place you might sometimes try to escape from, too… Dear Mohsen, with emotions so deep that not everyone may be able to understand them… the hidden half of the moon.... What you’ve been through is not something small or simple. I want you never to forget that you are loved, and that your feelings matter more than words could ever express. You are an artist. Sometimes born from pain, sometimes from joy, sometimes from anger, and sometimes from peace. But it is the depth within you that creates the miracle.",
+    image: "images/Hide_part.jpg",
+    music: "music/Hide_part.mp3"
+  },
+  {
+    title: "Wild Chaos",
+    text: "Ah, honestly, I just wanted to remind you that if you ever feel like taking someone’s account down, we might make a pretty good team!",
+    image: "images/Wild.jpg",
+    music: null
+  },
+  {
+    title: "What Heals You",
+    text: "Maybe healing is finding your way back to yourself, even after getting lost in the emptiest rooms of your mind.\n\n“I am a memory that keeps searching for the room it once belonged to.”",
+    image: "images/Healing.jpg",
+    music: "music/Healing.mp3"
+  },
+  {
+    title: "Unseen Worlds",
+    text: "You know, I really believe that one day, someone will invent that button… But what if they don't use it for good things? ....... What if that's already the case? ...... You know, I hope that if that button ever exists, you're the first one to get your hands on it. :) ...... And if you ever disappear into another world and stumble upon a magical beanstalk… please send me some magic beans",
+    image: "images/Drems.jpg",
+    music: "music/Dream.mp3"
+  },
+  {
+    title: "The Distance",
+    text: "I want to say that if it weren't for this distance, I'd probably bake you an apple cake with some walnuts, make a little bitter coffee, and place a white candle on top for you. And we'd probably end up celebrating your birthday in the most random place imaginable... But well... we couldn't.\n\nIt's okay, though. The fact that you've been here for several minutes now means that nothing can stop us",
+    image: "images/Distance.jpg",
+    music: "music/Distance_.mp3"
+  }
 ];
 
 let current = 0;
 const opened = new Set();
 let started = false;
 
-const world = document.getElementById('world');
-const panel = document.getElementById('panel');
-const intro = document.getElementById('intro');
-const sky = document.getElementById('sky');
-const nextButton = document.getElementById('next');
-const closeButton = document.getElementById('close');
+const world = document.getElementById("world");
+const panel = document.getElementById("panel");
+const intro = document.getElementById("intro");
+const sky = document.getElementById("sky");
+const nextButton = document.getElementById("next");
+const closeButton = document.getElementById("close");
+const sectionImage = document.getElementById("sectionImage");
+const sectionMusic = document.getElementById("sectionMusic");
 
+function stopMusic() {
+  sectionMusic.pause();
+  sectionMusic.currentTime = 0;
+  sectionMusic.removeAttribute("src");
+  sectionMusic.load();
+}
+
+function setMusic(path) {
+  stopMusic();
+
+  if (!path) return;
+
+  sectionMusic.src = path;
+  sectionMusic.load();
+
+  const playback = sectionMusic.play();
+  if (playback && typeof playback.catch === "function") {
+    playback.catch(() => {
+      // If the browser blocks playback, the user can try again
+      // after interacting with the page.
+    });
+  }
+}
+
+function setImage(path, altText) {
+  sectionImage.style.display = "none";
+  sectionImage.alt = altText || "";
+
+  if (!path) return;
+
+  sectionImage.onload = () => {
+    sectionImage.style.display = "block";
+  };
+
+  sectionImage.onerror = () => {
+    sectionImage.style.display = "none";
+    console.error("Could not load image:", path);
+  };
+
+  sectionImage.src = path;
+}
 
 function focusRung(i) {
-  const rung = document.getElementById('r' + (i + 1));
+  const rung = document.getElementById("r" + (i + 1));
   const scale = 1.7;
   const y = rung.offsetTop + rung.offsetHeight / 2;
   const center = window.innerHeight / 2;
@@ -144,82 +236,119 @@ function focusRung(i) {
 function openStep(i) {
   current = i;
   opened.add(i);
-  document.getElementById('counter').textContent = `STAR ${i + 1} OF 6`;
-  document.getElementById('title').textContent = data[i].title;
-  document.getElementById('content').innerHTML =
-    '<p>' + data[i].text.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
-  nextButton.style.display = 'inline-block';
-  nextButton.textContent = i === 5 ? 'Continue to the Moon ☾' : 'Continue upward ↑';
-  panel.classList.add('show');
+
+  const step = data[i];
+
+  document.getElementById("counter").textContent =
+    `STAR ${i + 1} OF 6`;
+
+  document.getElementById("title").textContent = step.title;
+
+  document.getElementById("content").innerHTML =
+    "<p>" +
+    step.text
+      .replace(/\n\n/g, "</p><p>")
+      .replace(/\n/g, "<br>") +
+    "</p>";
+
+  setImage(step.image, step.title);
+  setMusic(step.music);
+
+  nextButton.style.display = "inline-block";
+  nextButton.textContent =
+    i === 5 ? "Continue to the Moon ☾" : "Continue upward ↑";
+
+  panel.classList.add("show");
 }
 
-document.getElementById('start').onclick = () => {
+function showFinalLetter() {
+  stopMusic();
+
+  document.getElementById("counter").textContent = "YOU MADE IT";
+  document.getElementById("title").textContent = "A Letter for You";
+
+  document.getElementById("content").innerHTML =
+    "<p>Happy Birthday.</p>" +
+    "<p>I know this might be a little silly, and I hope the website hasn't bugged out... but well, look! Here we are, and we finally made it to the moon.</p>" +
+    "<p>I'm glad you're here, and just look at you! You've turned out to be an amazing person.</p>" +
+    "<p>Somewhere under this same sky, someone is very glad you exist.</p>" +
+    "<p>With love, always. ✦</p>";
+
+  setImage("images/End.jpg", "A Letter for You");
+  setMusic("music/End.mp3");
+
+  nextButton.style.display = "none";
+  panel.classList.add("show");
+
+  document.getElementById("moon").style.boxShadow =
+    "0 0 65px #fff, 0 0 180px #c3d6ff";
+}
+
+document.getElementById("start").onclick = () => {
   if (started) return;
+
   started = true;
-  sky.classList.add('journey-started');
-  intro.style.opacity = '0';
-  setTimeout(() => { intro.style.display = 'none'; }, 500);
+  sky.classList.add("journey-started");
+  intro.style.opacity = "0";
+
+  setTimeout(() => {
+    intro.style.display = "none";
+  }, 500);
+
   current = 0;
   focusRung(0);
+
   setTimeout(() => openStep(0), 1900);
 };
 
-document.querySelectorAll('.rung').forEach((r, i) => {
+document.querySelectorAll(".rung").forEach((r, i) => {
   r.onclick = () => {
     if (!started) return;
+
     focusRung(i);
     setTimeout(() => openStep(i), 1900);
   };
 });
 
-closeButton.onclick = () => panel.classList.remove('show');
+closeButton.onclick = () => {
+  panel.classList.remove("show");
+  stopMusic();
+};
 
 nextButton.onclick = () => {
-  panel.classList.remove('show');
+  panel.classList.remove("show");
+  stopMusic();
 
   if (current < 5) {
     current++;
     focusRung(current);
     setTimeout(() => openStep(current), 1900);
   } else {
-    world.style.transform = 'translateY(0) scale(1)';
-    document.getElementById('moon').style.boxShadow =
-      '0 0 65px #fff, 0 0 180px #c3d6ff';
+    world.style.transform = "translateY(0) scale(1)";
 
     setTimeout(() => {
-      document.getElementById('counter').textContent = 'YOU MADE IT';
-      document.getElementById('title').textContent = 'A Letter for You';
-      document.getElementById('content').innerHTML =
-        '<p>Happy Birthday.</p>' +
-        '<p>I know this might be a little silly, and I hope the website hasnt bugged out... but well look! Here we are, and we finally made it to the moon.</p>' +
-        '<p>I’m glad you’re here, and just look at you! You’ve turned out to be an amazing person.</p>' +
-        '<p>Somewhere under this same sky, someone is very glad you exist.</p>' +
-        '<p>With love, always. ✦</p>';
-
-      nextButton.style.display = 'none';
-      panel.classList.add('show');
+      showFinalLetter();
     }, 1900);
   }
 };
 
-document.getElementById('moon').onclick = () => {
-  document.getElementById('counter').textContent =
-    opened.size === 6 ? 'THE FINAL SECRET' : 'NOT YET';
-  document.getElementById('title').textContent =
-    opened.size === 6 ? 'A Letter for You' : 'The Moon is waiting';
+document.getElementById("moon").onclick = () => {
+  if (opened.size === 6) {
+    showFinalLetter();
+    return;
+  }
 
-  document.getElementById('content').innerHTML =
-    opened.size === 6
-      ? '<p>Happy Birthday.</p><p>Thank you for being one of the small lights that make this enormous universe feel less lonely.</p><p>May your next trip around the sun be full of music, stories, and beautiful surprises.</p><p>Somewhere under this same sky, someone is glad you exist. ✦</p>'
-      : '<p>Discover all six steps first. The last secret is waiting at the top.</p>';
+  stopMusic();
 
-  nextButton.style.display = 'none';
-  panel.classList.add('show');
-};
+  document.getElementById("counter").textContent = "NOT YET";
+  document.getElementById("title").textContent = "The Moon is waiting";
 
-closeButton.onclick = () => {
-  panel.classList.remove('show');
-  nextButton.style.display = 'inline-block';
+  document.getElementById("content").innerHTML =
+    "<p>Discover all six steps first. The last secret is waiting at the top.</p>";
+
+  setImage(null, "");
+  nextButton.style.display = "none";
+  panel.classList.add("show");
 };
 </script>
 </body>
